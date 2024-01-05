@@ -48,7 +48,7 @@ function processUserInput(commandName) {
 }
 
 function displayHelp() {
-  [...commands.keys()].forEach((commandName) => insertParagraphElement(commandName));
+  commands.forEach((_command, commandName) => insertParagraphElement(commandName));
   insertSpaceParagraph();
 }
 
@@ -166,6 +166,9 @@ function handleCtrlKey(code) {
     case "KeyC":
       handleCtrlKeyC();
       break;
+    case "KeyV":
+      handleCtrlKeyV();
+      break;
   }
 }
 
@@ -211,6 +214,31 @@ function handleKeyDown(event) {
 
 function resetIndexCommand() {
   commandPromptIndex = -1;
+}
+
+async function processClipboardCommands() {
+  const clipboard = await navigator.clipboard.readText();
+
+  if (!clipboard.trim()) return;
+
+  const inputs = clipboard.split(/\r\n|\n|\r/);
+  const lastInput = inputs.pop() || "";
+
+  inputs.forEach((commandInput) => {
+    const { commandName, params } = parseCommandInput(commandInput);
+
+    commandPromptElement.textContent = initialCommandPrompt + commandInput;
+    commandPromptSaveElement.textContent = initialCommandPrompt + commandInput;
+
+    insertCommandPrompt();
+    addToHitoryCommand(commandInput);
+    processUserInput(commandName);
+  });
+
+  commandPromptElement.textContent = commandPromptSaveElement.textContent + lastInput;
+  commandPromptSaveElement.textContent = commandPromptSaveElement.textContent + lastInput;
+
+  adjustVerticalBarPosition();
 }
 
 function handleArrowDown() {
@@ -269,6 +297,10 @@ function handleCtrlKeyC() {
   resetIndexCommand();
 }
 
+function handleCtrlKeyV() {
+  processClipboardCommands();
+}
+
 function handleEnter() {
   const commandInput = commandPromptElement.textContent.substring(initialCommandPromptLength);
   const { commandName, params } = parseCommandInput(commandInput);
@@ -283,29 +315,7 @@ function handleEnter() {
 /** @param {MouseEvent} event */
 async function handleContextMenu(event) {
   event.preventDefault();
-
-  const clipboard = await navigator.clipboard.readText();
-
-  if (!clipboard.trim()) return;
-
-  const inputs = clipboard.split(/\r\n|\n|\r/);
-  const lastInput = inputs.pop() || "";
-
-  inputs.forEach((commandInput) => {
-    const { commandName, params } = parseCommandInput(commandInput);
-
-    commandPromptElement.textContent = initialCommandPrompt + commandInput;
-    commandPromptSaveElement.textContent = initialCommandPrompt + commandInput;
-
-    insertCommandPrompt();
-    addToHitoryCommand(commandInput);
-    processUserInput(commandName);
-  });
-
-  commandPromptElement.textContent = commandPromptSaveElement.textContent + lastInput;
-  commandPromptSaveElement.textContent = commandPromptSaveElement.textContent + lastInput;
-
-  adjustVerticalBarPosition();
+  processClipboardCommands();
 }
 
 function handleBackspace() {
