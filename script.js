@@ -3,8 +3,11 @@ const terminalHistoryElement = document.querySelector("#terminal-history");
 const commandPromptElement = document.querySelector("#command-prompt");
 const commandPromptSaveElement = document.querySelector("#command-prompt-save");
 
-const initialCommandPrompt = `C:\\\u003E`;
+const initialCommandPrompt = `:\u003E`;
 const initialCommandPromptLength = initialCommandPrompt.length;
+
+commandPromptElement.textContent = initialCommandPrompt;
+commandPromptSaveElement.textContent = initialCommandPrompt;
 
 const historyCommands = [];
 let commandPromptIndex = -1;
@@ -19,7 +22,7 @@ const commands = new Map([
 ]);
 
 const commandNotFoundErrorTemplate = `'%command%' n’est pas reconnu en tant que commande.`;
-const osVersion = `Microsoft Windows [version 10]`;
+const osVersion = `Terminal UI [version 1]`;
 
 /**
  * @param {string} text
