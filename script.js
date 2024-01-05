@@ -6,9 +6,6 @@ const commandPromptSaveElement = document.querySelector("#command-prompt-save");
 const initialCommandPrompt = `:\u003E`;
 const initialCommandPromptLength = initialCommandPrompt.length;
 
-commandPromptElement.textContent = initialCommandPrompt;
-commandPromptSaveElement.textContent = initialCommandPrompt;
-
 const historyCommands = [];
 let commandPromptIndex = -1;
 
@@ -16,13 +13,13 @@ const commands = new Map([
   ["help", displayHelp],
   ["time", displayTime],
   ["date", displayDate],
-  ["cls", clearTerminal],
+  ["clear", clearTerminal],
   ["history", displayHistoryCommands],
-  ["ver", displayOsVersion],
+  ["version", displayOsVersion],
 ]);
 
 const commandNotFoundErrorTemplate = `'%command%' n’est pas reconnu en tant que commande.`;
-const osVersion = `Terminal UI [version 1]`;
+const osVersion = `Terminal UI v1`;
 
 /**
  * @param {string} text
@@ -386,20 +383,30 @@ function initAnimationCommandPrompt() {
   window.addEventListener("focus", enableCommandPromptAnimation);
 }
 
-function initUITerminal() {
-  insertOsVersionParagraph();
-  insertSpaceParagraph();
+function initPromptValueDefault() {
+  commandPromptElement.textContent = initialCommandPrompt;
+  commandPromptSaveElement.textContent = initialCommandPrompt;
+}
 
-  adjustVerticalBarPosition();
-  enableCommandPromptAnimation();
-
-  initAnimationCommandPrompt();
-
+function initClipboardEvent() {
   document.addEventListener("contextmenu", handleContextMenu);
   document.addEventListener("selectionchange", handleSelectionChange);
+}
 
+function initKeyEvent() {
   document.addEventListener("keyup", handleKeyUp);
   document.addEventListener("keydown", handleKeyDown);
 }
 
-initUITerminal();
+function main() {
+  insertOsVersionParagraph();
+  insertSpaceParagraph();
+  initPromptValueDefault();
+  initAnimationCommandPrompt();
+  adjustVerticalBarPosition();
+  enableCommandPromptAnimation();
+  initClipboardEvent();
+  initKeyEvent();
+}
+
+main();
