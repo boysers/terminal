@@ -1,0 +1,17 @@
+{
+  "name": "terminal",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "script.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdom": "^23.1.0",
+    "vitest": "^1.1.3"
+  }
+}
