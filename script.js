@@ -1,3 +1,5 @@
+import { createParagraphElement, formatTime, formatDate } from "./utils.js";
+
 const terminalElement = document.querySelector("#terminal");
 const terminalHistoryElement = document.querySelector("#terminal-history");
 const commandPromptElement = document.querySelector("#command-prompt");
@@ -20,16 +22,6 @@ const commands = new Map([
 
 const commandNotFoundErrorTemplate = `'%command%' n’est pas reconnu en tant que commande.`;
 const osVersion = `Terminal UI v1`;
-
-/**
- * @param {string} text
- * @returns {HTMLParagraphElement}
- */
-function createParagraphElement(text) {
-  const paragraph = document.createElement("p");
-  paragraph.appendChild(document.createTextNode(text));
-  return paragraph;
-}
 
 /** @param {string} text */
 function insertParagraphElement(text) {
@@ -109,34 +101,6 @@ function insertCommandPrompt() {
   insertParagraphElement(commandPromptElement.textContent);
   commandPromptElement.textContent = initialCommandPrompt;
   commandPromptSaveElement.textContent = initialCommandPrompt;
-}
-
-/**
- * @param {Date} date
- * @returns {string}
- */
-function formatTime(date) {
-  const hours = date.getHours().toString().padStart(2, 0);
-  const minutes = date.getMinutes().toString().padStart(2, 0);
-  const seconds = date.getSeconds().toString().padStart(2, 0);
-  return `${hours}:${minutes}:${seconds}`;
-}
-
-/**
- * @param {Date} date
- * @returns {string}
- */
-function formatDate(date) {
-  const options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    timeZoneName: "short",
-  };
-  return new Intl.DateTimeFormat("fr-FR", options).format(date);
 }
 
 /** @param {string} commandInput */
