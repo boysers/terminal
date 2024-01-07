@@ -1,12 +1,15 @@
+import {
+  commandNotFoundErrorTemplate,
+  initialCommandPrompt,
+  initialCommandPromptLength,
+  osVersion,
+} from "./constants.js";
 import { createParagraphElement, formatTime, formatDate } from "./utils.js";
 
 const terminalElement = document.querySelector("#terminal");
 const terminalHistoryElement = document.querySelector("#terminal-history");
 const commandPromptElement = document.querySelector("#command-prompt");
 const commandPromptSaveElement = document.querySelector("#command-prompt-save");
-
-const initialCommandPrompt = `:\u003E`;
-const initialCommandPromptLength = initialCommandPrompt.length;
 
 const historyCommands = [];
 let commandPromptIndex = -1;
@@ -19,9 +22,6 @@ const commands = new Map([
   ["history", displayHistoryCommands],
   ["version", displayOsVersion],
 ]);
-
-const commandNotFoundErrorTemplate = `'%command%' n’est pas reconnu en tant que commande.`;
-const osVersion = `Terminal UI v1`;
 
 /** @param {string} text */
 function insertParagraphElement(text) {
