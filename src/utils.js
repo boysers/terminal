@@ -4,7 +4,8 @@
  */
 export function createParagraphElement(text) {
   const paragraph = document.createElement("p");
-  paragraph.appendChild(document.createTextNode(text));
+  const textNode = document.createTextNode(text);
+  paragraph.appendChild(textNode);
   return paragraph;
 }
 
