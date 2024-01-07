@@ -10,6 +10,15 @@ export function createParagraphElement(text) {
 }
 
 /**
+ * @param {string} text
+ * @param {HTMLElement} parentElement
+ */
+export function insertParagraphElementWithText(text, parentElement) {
+  const paragraph = createParagraphElement(text);
+  parentElement.appendChild(paragraph);
+}
+
+/**
  * @param {Date} date
  * @returns {string}
  */

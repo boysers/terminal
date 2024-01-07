@@ -4,7 +4,7 @@ import {
   initialCommandPromptLength,
   osVersion,
 } from "./constants.js";
-import { createParagraphElement, formatTime, formatDate } from "./utils.js";
+import { formatTime, formatDate, insertParagraphElementWithText } from "./utils.js";
 
 const terminalElement = document.querySelector("#terminal");
 const terminalHistoryElement = document.querySelector("#terminal-history");
@@ -24,9 +24,8 @@ const commands = new Map([
 ]);
 
 /** @param {string} text */
-function insertParagraphElement(text) {
-  const paragraph = createParagraphElement(text);
-  terminalHistoryElement.appendChild(paragraph);
+function insertParagraphToTerminalHistory(text) {
+  return insertParagraphElementWithText(text, terminalHistoryElement);
 }
 
 /** @param {string} commandName */
@@ -35,24 +34,24 @@ function processUserInput(commandName) {
 
   if (!commandName.trim()) return;
 
-  insertParagraphElement(userInputValue);
+  insertParagraphToTerminalHistory(userInputValue);
   handleCommand(commandName);
 }
 
 function displayHelp() {
-  commands.forEach((_command, commandName) => insertParagraphElement(commandName));
+  commands.forEach((_command, commandName) => insertParagraphToTerminalHistory(commandName));
   insertSpaceParagraph();
 }
 
 /** @param {string} commandName */
 function displayCommandNotFound(commandName) {
   const commandnotFoundError = commandNotFoundErrorTemplate.replace("%command%", commandName);
-  insertParagraphElement(commandnotFoundError);
+  insertParagraphToTerminalHistory(commandnotFoundError);
   insertSpaceParagraph();
 }
 
 function displayHistoryCommands() {
-  [...historyCommands].reverse().forEach((command) => insertParagraphElement(command));
+  [...historyCommands].reverse().forEach((command) => insertParagraphToTerminalHistory(command));
   insertSpaceParagraph();
 }
 
@@ -63,13 +62,13 @@ function displayOsVersion() {
 function displayTime() {
   const now = new Date();
   const time = formatTime(now);
-  insertParagraphElement(time);
+  insertParagraphToTerminalHistory(time);
 }
 
 function displayDate() {
   const now = new Date();
   const date = formatDate(now);
-  insertParagraphElement(date);
+  insertParagraphToTerminalHistory(date);
 }
 
 /** @param {string} commandName */
@@ -85,7 +84,7 @@ function handleCommand(commandName) {
 }
 
 function insertOsVersionParagraph() {
-  insertParagraphElement(osVersion);
+  insertParagraphToTerminalHistory(osVersion);
 }
 
 function clearTerminal() {
@@ -94,11 +93,11 @@ function clearTerminal() {
 }
 
 function insertSpaceParagraph() {
-  insertParagraphElement("\u00A0");
+  insertParagraphToTerminalHistory("\u00A0");
 }
 
 function insertCommandPrompt() {
-  insertParagraphElement(commandPromptElement.textContent);
+  insertParagraphToTerminalHistory(commandPromptElement.textContent);
   commandPromptElement.textContent = initialCommandPrompt;
   commandPromptSaveElement.textContent = initialCommandPrompt;
 }
@@ -342,14 +341,14 @@ async function handleSelectionChange(event) {
   await navigator.clipboard.writeText(selection);
 }
 
-function initAnimationCommandPrompt() {
-  window.addEventListener("blur", disableCommandPromptAnimation);
-  window.addEventListener("focus", enableCommandPromptAnimation);
-}
-
 function initPromptValueDefault() {
   commandPromptElement.textContent = initialCommandPrompt;
   commandPromptSaveElement.textContent = initialCommandPrompt;
+}
+
+function initAnimationCommandPrompt() {
+  window.addEventListener("blur", disableCommandPromptAnimation);
+  window.addEventListener("focus", enableCommandPromptAnimation);
 }
 
 function initClipboardEvent() {
