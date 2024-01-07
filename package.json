@@ -5,12 +5,14 @@
   "type": "module",
   "main": "script.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.1.3",
     "jsdom": "^23.1.0",
     "vitest": "^1.1.3"
   }
